@@ -38,7 +38,7 @@
       }
 
       .stats {
-        margin-bottom: 10px;
+        margin-bottom: 6px;
         font-weight: bold;
         color: #ffeb3b;
       }
@@ -93,29 +93,23 @@
       .message {
         margin-top: 15px;
         min-height: 30px;
-        font-size: 1.15rem;
+        font-size: 1.1rem;
       }
 
-      .reset {
-        margin-top: 15px;
-        padding: 10px 25px;
+      .controls button {
+        margin-top: 10px;
+        padding: 10px 22px;
         border-radius: 15px;
         border: none;
         cursor: pointer;
         background: rgba(255, 255, 255, 0.35);
         color: white;
         font-size: 1rem;
+        margin-inline: 5px;
       }
 
-      .reset:hover {
+      .controls button:hover {
         background: rgba(255, 255, 255, 0.6);
-      }
-
-      @media (max-width: 480px) {
-        .letter {
-          width: 24px;
-          font-size: 1.3rem;
-        }
       }
     </style>
   </head>
@@ -123,7 +117,9 @@
   <body>
     <div class="container">
       <h1>🪢 Ahorcado Troll</h1>
+
       <div class="stats">🏆 Victorias: <span id="wins">0</span></div>
+      <div class="stats">🌍 Idioma: <span id="language">---</span></div>
 
       <canvas id="canvas" width="200" height="200"></canvas>
 
@@ -131,201 +127,221 @@
       <div class="keyboard" id="keyboard"></div>
       <div class="message" id="message"></div>
 
-      <button class="reset" onclick="resetGame()">🔄 Reiniciar</button>
+      <div class="controls">
+        <button onclick="resetGame()">🔄 Reiniciar</button>
+        <button onclick="giveHint()">💡 Pista</button>
+      </div>
     </div>
 
     <script>
-      
       const words = [
-  "javascript",
-  "backend",
-  "frontend",
-  "programacion",
-  "canvas",
-  "murcielago",
-  "desarrollo",
-  "algoritmo",
-  "variable",
-  "funcion",
-  "debugging",
-  "compilador",
-  "framework",
-  "inteligencia",
-  "artificial",
-  "robotica",
-  "servidor",
-  "cliente",
-  "navegador",
-  "internet",
-  "redes",
-  "computadora",
-  "teclado",
-  "pantalla",
-  "memoria",
-  "procesador",
-  "sistema",
-  "operativo",
-  "linux",
-  "windows",
-  "android",
-  "ios",
-  "python",
-  "java",
-  "csharp",
-  "golang",
-  "rust",
-  "typescript",
-  "html",
-  "css",
-  "dom",
-  "api",
-  "json",
-  "xml",
-  "token",
-  "encriptacion",
-  "seguridad",
-  "hacker",
-  "phishing",
-  "firewall",
-  "cloud",
-  "docker",
-  "kubernetes",
-  "virtualizacion",
-  "bigdata",
-  "machinelearning",
-  "dataset",
-  "modelo",
-  "entrenamiento",
-  "redneuronal",
-  "matriz",
-  "vector",
-  "integral",
-  "derivada",
-  "ecuacion",
-  "fisica",
-  "quimica",
-  "biologia",
-  "astronomia",
-  "planeta",
-  "galaxia",
-  "universo",
-  "estrella",
-  "cometa",
-  "asteroide",
-  "saturno",
-  "marte",
-  "venus",
-  "tierra",
-  "oceano",
-  "montana",
-  "volcan",
-  "selva",
-  "bosque",
-  "desierto",
-  "ciudad",
-  "pueblo",
-  "historia",
-  "arte",
-  "musica",
-  "pintura",
-  "escultura",
-  "teatro",
-  "cine",
-  "literatura",
-  "poesia",
-  "novela",
-  "ensayo",
-  "filosofia",
-  "psicologia",
-  "sociologia",
-  "economia",
-  "politica"
+  { text: "javascript", lang: "Inglés" },
+  { text: "backend", lang: "Inglés" },
+  { text: "frontend", lang: "Inglés" },
+  { text: "docker", lang: "Inglés" },
+  { text: "framework", lang: "Inglés" },
+  { text: "programacion", lang: "Español" },
+  { text: "murcielago", lang: "Español" },
+  { text: "algoritmo", lang: "Español" },
+  { text: "computadora", lang: "Español" },
+  { text: "seguridad", lang: "Español" },
+  { text: "python", lang: "Inglés" },
+  { text: "java", lang: "Inglés" },
+  { text: "typescript", lang: "Inglés" },
+  { text: "html", lang: "Inglés" },
+  { text: "css", lang: "Inglés" },
+  { text: "variable", lang: "Español" },
+  { text: "funcion", lang: "Español" },
+  { text: "servidor", lang: "Español" },
+  { text: "cliente", lang: "Español" },
+  { text: "internet", lang: "Español" },
+  { text: "cloud", lang: "Inglés" },
+  { text: "firewall", lang: "Inglés" },
+  { text: "token", lang: "Inglés" },
+  { text: "json", lang: "Inglés" },
+  { text: "xml", lang: "Inglés" },
+  { text: "redes", lang: "Español" },
+  { text: "pantalla", lang: "Español" },
+  { text: "teclado", lang: "Español" },
+  { text: "memoria", lang: "Español" },
+  { text: "procesador", lang: "Español" },
+  { text: "linux", lang: "Inglés" },
+  { text: "windows", lang: "Inglés" },
+  { text: "android", lang: "Inglés" },
+  { text: "ios", lang: "Inglés" },
+  { text: "rust", lang: "Inglés" },
+  { text: "golang", lang: "Inglés" },
+  { text: "csharp", lang: "Inglés" },
+  { text: "debugging", lang: "Inglés" },
+  { text: "compilador", lang: "Español" },
+  { text: "inteligencia", lang: "Español" },
+  { text: "artificial", lang: "Español" },
+  { text: "robotica", lang: "Español" },
+  { text: "machinelearning", lang: "Inglés" },
+  { text: "dataset", lang: "Inglés" },
+  { text: "modelo", lang: "Español" },
+  { text: "entrenamiento", lang: "Español" },
+  { text: "redneuronal", lang: "Español" },
+  { text: "matriz", lang: "Español" },
+  { text: "vector", lang: "Español" },
+  { text: "integral", lang: "Español" },
+  { text: "derivada", lang: "Español" },
+  { text: "ecuacion", lang: "Español" },
+  { text: "physics", lang: "Inglés" },
+  { text: "chemistry", lang: "Inglés" },
+  { text: "biology", lang: "Inglés" },
+  { text: "astronomy", lang: "Inglés" },
+  { text: "planeta", lang: "Español" },
+  { text: "galaxia", lang: "Español" },
+  { text: "universo", lang: "Español" },
+  { text: "estrella", lang: "Español" },
+  { text: "cometa", lang: "Español" },
+  { text: "asteroide", lang: "Español" },
+  { text: "saturno", lang: "Español" },
+  { text: "marte", lang: "Español" },
+  { text: "venus", lang: "Español" },
+  { text: "tierra", lang: "Español" },
+  { text: "ocean", lang: "Inglés" },
+  { text: "mountain", lang: "Inglés" },
+  { text: "volcano", lang: "Inglés" },
+  { text: "forest", lang: "Inglés" },
+  { text: "desert", lang: "Inglés" },
+  { text: "ciudad", lang: "Español" },
+  { text: "pueblo", lang: "Español" },
+  { text: "historia", lang: "Español" },
+  { text: "arte", lang: "Español" },
+  { text: "musica", lang: "Español" },
+  { text: "pintura", lang: "Español" },
+  { text: "escultura", lang: "Español" },
+  { text: "teatro", lang: "Español" },
+  { text: "cine", lang: "Español" },
+  { text: "literatura", lang: "Español" },
+  { text: "poesia", lang: "Español" },
+  { text: "novela", lang: "Español" },
+  { text: "ensayo", lang: "Español" },
+  { text: "filosofia", lang: "Español" },
+  { text: "psicologia", lang: "Español" },
+  { text: "sociologia", lang: "Español" },
+  { text: "economia", lang: "Español" },
+  { text: "politica", lang: "Español" },
+  { text: "science", lang: "Inglés" },
+  { text: "technology", lang: "Inglés" },
+  { text: "innovation", lang: "Inglés" },
+  { text: "knowledge", lang: "Inglés" },
+  { text: "education", lang: "Inglés" },
+  { text: "culture", lang: "Inglés" },
+  { text: "history", lang: "Inglés" },
+  { text: "philosophy", lang: "Inglés" },
+  { text: "psychology", lang: "Inglés" },
+  { text: "sociology", lang: "Inglés" },
+  { text: "economics", lang: "Inglés" },
+  { text: "politics", lang: "Inglés" }
 ];
-      
+
+
       const trollMessages = [
-        "😈 JAJA, eso estuvo malísimo",
+        "😈 JAJA, malísima",
         "💀 Ni cerca…",
-        "🧠 Usa el cerebro, campeón",
         "😂 La máquina se ríe de ti",
-      ];
+        "🧠 Concéntrate, humano",
+        "en serio? esa letra? 🤦‍♂️",
+        "😹 Casi, pero no",
+        "No es esa ._. ",
+        "😜 Intenta otra letra"      ];
 
       const canvas = document.getElementById("canvas");
       const ctx = canvas.getContext("2d");
 
-      let wins = parseInt(localStorage.getItem("wins")) || 0;
+      let wins = Number(localStorage.getItem("wins")) || 0;
       document.getElementById("wins").textContent = wins;
 
       let word = "";
+      let wordLanguage = "";
       let guessed = [];
       let errors = 0;
+      let hintUsed = false;
       const maxErrors = 6;
 
       function startGame() {
-        word = words[Math.floor(Math.random() * words.length)];
+        const selected = words[Math.floor(Math.random() * words.length)];
+        word = selected.text;
+        wordLanguage = selected.lang;
+
         guessed = [];
         errors = 0;
-        ctx.clearRect(0, 0, 200, 200);
+        hintUsed = false;
+
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
         document.getElementById("message").textContent = "";
+        document.getElementById("language").textContent = wordLanguage;
+
         renderWord();
         renderKeyboard();
       }
 
-      function drawHangman(step) {
-        ctx.lineWidth = 3;
-        ctx.strokeStyle = "#fff";
+function drawHangman(step) {
+  ctx.lineWidth = 3;
+  ctx.strokeStyle = "#fff";
 
-        if (step === 1) {
-          ctx.beginPath();
-          ctx.moveTo(20, 180);
-          ctx.lineTo(180, 180);
-          ctx.stroke();
-        }
-        if (step === 2) {
-          ctx.beginPath();
-          ctx.moveTo(50, 180);
-          ctx.lineTo(50, 20);
-          ctx.lineTo(120, 20);
-          ctx.stroke();
-        }
-        if (step === 3) {
-          ctx.beginPath();
-          ctx.moveTo(120, 20);
-          ctx.lineTo(120, 40);
-          ctx.stroke();
-        }
-        if (step === 4) {
-          ctx.beginPath();
-          ctx.arc(120, 55, 15, 0, Math.PI * 2);
-          ctx.stroke();
-        }
-        if (step === 5) {
-          ctx.beginPath();
-          ctx.moveTo(120, 70);
-          ctx.lineTo(120, 120);
-          ctx.stroke();
-        }
-        if (step === 6) {
-          ctx.beginPath();
-          ctx.moveTo(120, 80);
-          ctx.lineTo(95, 105);
-          ctx.moveTo(120, 80);
-          ctx.lineTo(145, 105);
-          ctx.moveTo(120, 120);
-          ctx.lineTo(95, 150);
-          ctx.moveTo(120, 120);
-          ctx.lineTo(145, 150);
-          ctx.stroke();
-        }
-      }
+  const drawings = [
+    () => {
+      ctx.beginPath();
+      ctx.moveTo(20, 180);
+      ctx.lineTo(180, 180);
+      ctx.stroke();
+    },
+    () => {
+      ctx.beginPath();
+      ctx.moveTo(50, 180);
+      ctx.lineTo(50, 20);
+      ctx.lineTo(120, 20);
+      ctx.stroke();
+    },
+    () => {
+      ctx.beginPath();
+      ctx.moveTo(120, 20);
+      ctx.lineTo(120, 40);
+      ctx.stroke();
+    },
+    () => {
+      ctx.beginPath();
+      ctx.arc(120, 55, 15, 0, Math.PI * 2);
+      ctx.stroke();
+    },
+    () => {
+      ctx.beginPath();
+      ctx.moveTo(120, 70);
+      ctx.lineTo(120, 120);
+      ctx.stroke();
+    },
+    () => {
+      ctx.beginPath();
+      ctx.moveTo(120, 80);
+      ctx.lineTo(95, 105);
+      ctx.moveTo(120, 80);
+      ctx.lineTo(145, 105);
+      ctx.moveTo(120, 120);
+      ctx.lineTo(95, 150);
+      ctx.moveTo(120, 120);
+      ctx.lineTo(145, 150);
+      ctx.stroke();
+    }
+  ];
+
+  if (drawings[step - 1]) {
+    drawings[step - 1]();
+  }
+}
+
 
       function renderWord() {
-        const wordDiv = document.getElementById("word");
-        wordDiv.innerHTML = "";
-        word.split("").forEach((l) => {
-          const s = document.createElement("span");
-          s.className = "letter";
-          s.textContent = guessed.includes(l) ? l : "";
-          wordDiv.appendChild(s);
+        const container = document.getElementById("word");
+        container.innerHTML = "";
+        word.split("").forEach(letter => {
+          const span = document.createElement("span");
+          span.className = "letter";
+          span.textContent = guessed.includes(letter) ? letter : "";
+          container.appendChild(span);
         });
       }
 
@@ -333,10 +349,10 @@
         const kb = document.getElementById("keyboard");
         kb.innerHTML = "";
         for (let i = 97; i <= 122; i++) {
-          const b = document.createElement("button");
-          b.textContent = String.fromCharCode(i);
-          b.onclick = () => guess(b.textContent, b);
-          kb.appendChild(b);
+          const btn = document.createElement("button");
+          btn.textContent = String.fromCharCode(i);
+          btn.onclick = () => guess(btn.textContent, btn);
+          kb.appendChild(btn);
         }
       }
 
@@ -355,8 +371,37 @@
         }
       }
 
+      function giveHint() {
+        if (hintUsed) return;
+
+        const remainingLetters = [...new Set(word.split(""))]
+          .filter(letter => !guessed.includes(letter));
+
+        if (!remainingLetters.length) return;
+
+        const hintLetter =
+          remainingLetters[Math.floor(Math.random() * remainingLetters.length)];
+
+        guessed.push(hintLetter);
+        hintUsed = true;
+
+        document.querySelectorAll(".keyboard button").forEach(btn => {
+          if (btn.textContent === hintLetter) btn.disabled = true;
+        });
+
+        errors++;
+        drawHangman(errors);
+
+        document.getElementById("message").textContent =
+          `💡 Pista: la letra "${hintLetter.toUpperCase()}" es correcta`;
+
+        renderWord();
+        checkWin();
+        checkLose();
+      }
+
       function checkWin() {
-        if (word.split("").every((l) => guessed.includes(l))) {
+        if (word.split("").every(l => guessed.includes(l))) {
           wins++;
           localStorage.setItem("wins", wins);
           document.getElementById("wins").textContent = wins;
@@ -369,15 +414,14 @@
       function checkLose() {
         if (errors === maxErrors) {
           document.getElementById("message").textContent =
-            `💀 PERDISTE. La palabra era "${word}". Skill issue 😈`;
+            `💀 PERDISTE. Era "${word}". Skill issue 😈`;
           disableKeyboard();
         }
       }
 
       function disableKeyboard() {
-        document
-          .querySelectorAll(".keyboard button")
-          .forEach((b) => (b.disabled = true));
+        document.querySelectorAll(".keyboard button")
+          .forEach(btn => btn.disabled = true);
       }
 
       function resetGame() {
