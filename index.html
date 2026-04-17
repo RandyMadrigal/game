@@ -1,434 +1,433 @@
 <!doctype html>
 <html lang="es">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Ahorcado Troll</title>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ahorcado Troll</title>
 
-    <style>
-      * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-        font-family: "Segoe UI", sans-serif;
-      }
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Segoe UI", sans-serif;
+}
 
-      body {
-        min-height: 100vh;
-        background: linear-gradient(135deg, #141e30, #243b55);
-        display: flex;
-        justify-content: center;
-        align-items: center;
-      }
+body {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #141e30, #243b55);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: 0.4s;
+}
 
-      .container {
-        width: 95%;
-        max-width: 520px;
-        padding: 25px;
-        border-radius: 20px;
-        backdrop-filter: blur(15px);
-        background: rgba(255, 255, 255, 0.18);
-        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
-        color: #fff;
-        text-align: center;
-      }
+body.hard-mode {
+  background: radial-gradient(circle at top, #300000, #000);
+}
 
-      h1 {
-        margin-bottom: 10px;
-      }
+.container {
+  width: 95%;
+  max-width: 520px;
+  padding: 25px;
+  border-radius: 20px;
+  background: rgba(255,255,255,0.18);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.25);
+  color: #fff;
+  text-align: center;
+  transition: 0.4s;
+}
 
-      .stats {
-        margin-bottom: 6px;
-        font-weight: bold;
-        color: #ffeb3b;
-      }
+body.hard-mode .container {
+  background: rgba(40,0,0,0.9);
+  box-shadow: 0 0 25px rgba(255,0,0,0.4);
+}
 
-      canvas {
-        background: rgba(255, 255, 255, 0.15);
-        border-radius: 15px;
-        margin: 10px 0;
-      }
+.stats {
+  margin-bottom: 6px;
+  font-weight: bold;
+  color: #ffeb3b;
+}
 
-      .word {
-        display: flex;
-        justify-content: center;
-        gap: 10px;
-        margin: 15px 0;
-      }
+body.hard-mode .stats {
+  color: #ff5c5c;
+}
 
-      .letter {
-        width: 30px;
-        border-bottom: 3px solid #fff;
-        font-size: 1.5rem;
-        text-transform: uppercase;
-      }
+canvas {
+  background: rgba(255,255,255,0.15);
+  border-radius: 15px;
+  margin: 10px 0;
+}
 
-      .keyboard {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 8px;
-        justify-content: center;
-      }
+body.hard-mode canvas {
+  background: rgba(0,0,0,0.6);
+  box-shadow: inset 0 0 15px rgba(255,0,0,0.4);
+}
 
-      .keyboard button {
-        width: 38px;
-        height: 38px;
-        border-radius: 10px;
-        border: none;
-        background: rgba(255, 255, 255, 0.3);
-        color: white;
-        cursor: pointer;
-        transition: 0.2s;
-      }
+.word {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin: 15px 0;
+}
 
-      .keyboard button:hover:not(:disabled) {
-        transform: scale(1.1);
-        background: rgba(255, 255, 255, 0.6);
-      }
+.letter {
+  width: 30px;
+  border-bottom: 3px solid #fff;
+  font-size: 1.5rem;
+}
 
-      .keyboard button:disabled {
-        opacity: 0.4;
-      }
+.keyboard {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+}
 
-      .message {
-        margin-top: 15px;
-        min-height: 30px;
-        font-size: 1.1rem;
-      }
+.keyboard button {
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  border: none;
+  background: rgba(255,255,255,0.3);
+  color: white;
+  cursor: pointer;
+}
 
-      .controls button {
-        margin-top: 10px;
-        padding: 10px 22px;
-        border-radius: 15px;
-        border: none;
-        cursor: pointer;
-        background: rgba(255, 255, 255, 0.35);
-        color: white;
-        font-size: 1rem;
-        margin-inline: 5px;
-      }
+body.hard-mode .keyboard button {
+  background: rgba(90,0,0,0.7);
+}
 
-      .controls button:hover {
-        background: rgba(255, 255, 255, 0.6);
-      }
-    </style>
-  </head>
+.keyboard button:disabled {
+  opacity: 0.4;
+}
 
-  <body>
-    <div class="container">
-      <h1>🪢 Ahorcado Troll</h1>
+.controls button {
+  margin: 8px;
+  padding: 10px 20px;
+  border-radius: 15px;
+  border: none;
+  cursor: pointer;
+  background: rgba(255,255,255,0.35);
+  color: white;
+}
 
-      <div class="stats">🏆 Victorias: <span id="wins">0</span></div>
-      <div class="stats">🌍 Idioma: <span id="language">---</span></div>
+body.hard-mode .controls button {
+  background: linear-gradient(135deg, #600000, #200000);
+}
 
-      <canvas id="canvas" width="200" height="200"></canvas>
+.message {
+  min-height: 28px;
+  margin-top: 10px;
+}
+</style>
+</head>
 
-      <div class="word" id="word"></div>
-      <div class="keyboard" id="keyboard"></div>
-      <div class="message" id="message"></div>
+<body>
+<div class="container">
+  <h1>🪢 Ahorcado Troll</h1>
 
-      <div class="controls">
-        <button onclick="resetGame()">🔄 Reiniciar</button>
-        <button onclick="giveHint()">💡 Pista</button>
-      </div>
-    </div>
+  <div class="stats">🏆 Victorias: <span id="wins">0</span></div>
+  <div class="stats">🌍 Idioma: <span id="language">---</span></div>
+  <div class="stats">⏳ Tiempo: <span id="timer">∞</span></div>
 
-    <script>
+  <canvas id="canvas" width="200" height="200"></canvas>
+
+  <div class="word" id="word"></div>
+  <div class="keyboard" id="keyboard"></div>
+  <div class="message" id="message"></div>
+
+  <div class="controls">
+    <button onclick="resetGame()">🔄 Reiniciar</button>
+    <button onclick="giveHint()">💡 Pista</button>
+    <button onclick="toggleHardMode()"> Hard Mode </button>
+  </div>
+</div>
+
+<script>
       const words = [
-  { text: "javascript", lang: "Inglés" },
-  { text: "backend", lang: "Inglés" },
-  { text: "frontend", lang: "Inglés" },
-  { text: "docker", lang: "Inglés" },
-  { text: "framework", lang: "Inglés" },
-  { text: "programacion", lang: "Español" },
-  { text: "murcielago", lang: "Español" },
-  { text: "algoritmo", lang: "Español" },
-  { text: "computadora", lang: "Español" },
-  { text: "seguridad", lang: "Español" },
-  { text: "python", lang: "Inglés" },
-  { text: "java", lang: "Inglés" },
-  { text: "typescript", lang: "Inglés" },
-  { text: "html", lang: "Inglés" },
-  { text: "css", lang: "Inglés" },
-  { text: "variable", lang: "Español" },
-  { text: "funcion", lang: "Español" },
-  { text: "servidor", lang: "Español" },
-  { text: "cliente", lang: "Español" },
-  { text: "internet", lang: "Español" },
-  { text: "cloud", lang: "Inglés" },
-  { text: "firewall", lang: "Inglés" },
-  { text: "token", lang: "Inglés" },
-  { text: "json", lang: "Inglés" },
-  { text: "xml", lang: "Inglés" },
-  { text: "redes", lang: "Español" },
-  { text: "pantalla", lang: "Español" },
-  { text: "teclado", lang: "Español" },
-  { text: "memoria", lang: "Español" },
-  { text: "procesador", lang: "Español" },
-  { text: "linux", lang: "Inglés" },
-  { text: "windows", lang: "Inglés" },
-  { text: "android", lang: "Inglés" },
-  { text: "ios", lang: "Inglés" },
-  { text: "rust", lang: "Inglés" },
-  { text: "golang", lang: "Inglés" },
-  { text: "csharp", lang: "Inglés" },
-  { text: "debugging", lang: "Inglés" },
-  { text: "compilador", lang: "Español" },
-  { text: "inteligencia", lang: "Español" },
-  { text: "artificial", lang: "Español" },
-  { text: "robotica", lang: "Español" },
-  { text: "machinelearning", lang: "Inglés" },
-  { text: "dataset", lang: "Inglés" },
-  { text: "modelo", lang: "Español" },
-  { text: "entrenamiento", lang: "Español" },
-  { text: "redneuronal", lang: "Español" },
-  { text: "matriz", lang: "Español" },
-  { text: "vector", lang: "Español" },
-  { text: "integral", lang: "Español" },
-  { text: "derivada", lang: "Español" },
-  { text: "ecuacion", lang: "Español" },
-  { text: "physics", lang: "Inglés" },
-  { text: "chemistry", lang: "Inglés" },
-  { text: "biology", lang: "Inglés" },
-  { text: "astronomy", lang: "Inglés" },
-  { text: "planeta", lang: "Español" },
-  { text: "galaxia", lang: "Español" },
-  { text: "universo", lang: "Español" },
-  { text: "estrella", lang: "Español" },
-  { text: "cometa", lang: "Español" },
-  { text: "asteroide", lang: "Español" },
-  { text: "saturno", lang: "Español" },
-  { text: "marte", lang: "Español" },
-  { text: "venus", lang: "Español" },
-  { text: "tierra", lang: "Español" },
-  { text: "ocean", lang: "Inglés" },
-  { text: "mountain", lang: "Inglés" },
-  { text: "volcano", lang: "Inglés" },
-  { text: "forest", lang: "Inglés" },
-  { text: "desert", lang: "Inglés" },
-  { text: "ciudad", lang: "Español" },
-  { text: "pueblo", lang: "Español" },
-  { text: "historia", lang: "Español" },
-  { text: "arte", lang: "Español" },
-  { text: "musica", lang: "Español" },
-  { text: "pintura", lang: "Español" },
-  { text: "escultura", lang: "Español" },
-  { text: "teatro", lang: "Español" },
-  { text: "cine", lang: "Español" },
-  { text: "literatura", lang: "Español" },
-  { text: "poesia", lang: "Español" },
-  { text: "novela", lang: "Español" },
-  { text: "ensayo", lang: "Español" },
-  { text: "filosofia", lang: "Español" },
-  { text: "psicologia", lang: "Español" },
-  { text: "sociologia", lang: "Español" },
-  { text: "economia", lang: "Español" },
-  { text: "politica", lang: "Español" },
-  { text: "science", lang: "Inglés" },
-  { text: "technology", lang: "Inglés" },
-  { text: "innovation", lang: "Inglés" },
-  { text: "knowledge", lang: "Inglés" },
-  { text: "education", lang: "Inglés" },
-  { text: "culture", lang: "Inglés" },
-  { text: "history", lang: "Inglés" },
-  { text: "philosophy", lang: "Inglés" },
-  { text: "psychology", lang: "Inglés" },
-  { text: "sociology", lang: "Inglés" },
-  { text: "economics", lang: "Inglés" },
-  { text: "politics", lang: "Inglés" }
+        { text: "javascript", lang: "Inglés" },
+        { text: "backend", lang: "Inglés" },
+        { text: "frontend", lang: "Inglés" },
+        { text: "docker", lang: "Inglés" },
+        { text: "framework", lang: "Inglés" },
+        { text: "programacion", lang: "Español" },
+        { text: "murcielago", lang: "Español" },
+        { text: "algoritmo", lang: "Español" },
+        { text: "computadora", lang: "Español" },
+        { text: "seguridad", lang: "Español" },
+        { text: "python", lang: "Inglés" },
+        { text: "java", lang: "Inglés" },
+        { text: "typescript", lang: "Inglés" },
+        { text: "html", lang: "Inglés" },
+        { text: "css", lang: "Inglés" },
+        { text: "variable", lang: "Español" },
+        { text: "funcion", lang: "Español" },
+        { text: "servidor", lang: "Español" },
+        { text: "cliente", lang: "Español" },
+        { text: "internet", lang: "Español" },
+        { text: "cloud", lang: "Inglés" },
+        { text: "firewall", lang: "Inglés" },
+        { text: "token", lang: "Inglés" },
+        { text: "json", lang: "Inglés" },
+        { text: "xml", lang: "Inglés" },
+        { text: "redes", lang: "Español" },
+        { text: "pantalla", lang: "Español" },
+        { text: "teclado", lang: "Español" },
+        { text: "memoria", lang: "Español" },
+        { text: "procesador", lang: "Español" },
+        { text: "linux", lang: "Inglés" },
+        { text: "windows", lang: "Inglés" },
+        { text: "android", lang: "Inglés" },
+        { text: "ios", lang: "Inglés" },
+        { text: "rust", lang: "Inglés" },
+        { text: "golang", lang: "Inglés" },
+        { text: "csharp", lang: "Inglés" },
+        { text: "debugging", lang: "Inglés" },
+        { text: "compilador", lang: "Español" },
+        { text: "inteligencia", lang: "Español" },
+        { text: "artificial", lang: "Español" },
+        { text: "robotica", lang: "Español" },
+        { text: "machinelearning", lang: "Inglés" },
+        { text: "dataset", lang: "Inglés" },
+        { text: "modelo", lang: "Español" },
+        { text: "entrenamiento", lang: "Español" },
+        { text: "redneuronal", lang: "Español" },
+        { text: "matriz", lang: "Español" },
+        { text: "vector", lang: "Español" },
+        { text: "integral", lang: "Español" },
+        { text: "derivada", lang: "Español" },
+        { text: "ecuacion", lang: "Español" },
+        { text: "physics", lang: "Inglés" },
+        { text: "chemistry", lang: "Inglés" },
+        { text: "biology", lang: "Inglés" },
+        { text: "astronomy", lang: "Inglés" },
+        { text: "planeta", lang: "Español" },
+        { text: "galaxia", lang: "Español" },
+        { text: "universo", lang: "Español" },
+        { text: "estrella", lang: "Español" },
+        { text: "cometa", lang: "Español" },
+        { text: "asteroide", lang: "Español" },
+        { text: "saturno", lang: "Español" },
+        { text: "marte", lang: "Español" },
+        { text: "venus", lang: "Español" },
+        { text: "tierra", lang: "Español" },
+        { text: "ocean", lang: "Inglés" },
+        { text: "mountain", lang: "Inglés" },
+        { text: "volcano", lang: "Inglés" },
+        { text: "forest", lang: "Inglés" },
+        { text: "desert", lang: "Inglés" },
+        { text: "ciudad", lang: "Español" },
+        { text: "pueblo", lang: "Español" },
+        { text: "historia", lang: "Español" },
+        { text: "arte", lang: "Español" },
+        { text: "musica", lang: "Español" },
+        { text: "pintura", lang: "Español" },
+        { text: "escultura", lang: "Español" },
+        { text: "teatro", lang: "Español" },
+        { text: "cine", lang: "Español" },
+        { text: "literatura", lang: "Español" },
+        { text: "poesia", lang: "Español" },
+        { text: "novela", lang: "Español" },
+        { text: "ensayo", lang: "Español" },
+        { text: "filosofia", lang: "Español" },
+        { text: "psicologia", lang: "Español" },
+        { text: "sociologia", lang: "Español" },
+        { text: "economia", lang: "Español" },
+        { text: "politica", lang: "Español" },
+        { text: "science", lang: "Inglés" },
+        { text: "technology", lang: "Inglés" },
+        { text: "innovation", lang: "Inglés" },
+        { text: "knowledge", lang: "Inglés" },
+        { text: "education", lang: "Inglés" },
+        { text: "culture", lang: "Inglés" },
+        { text: "history", lang: "Inglés" },
+        { text: "philosophy", lang: "Inglés" },
+        { text: "psychology", lang: "Inglés" },
+        { text: "sociology", lang: "Inglés" },
+        { text: "economics", lang: "Inglés" },
+        { text: "politics", lang: "Inglés" },
+      ];
+
+const canvas = document.getElementById("canvas");
+const ctx = canvas.getContext("2d");
+
+let HARD_MODE = false;
+let maxErrors = 6;
+let timeLeft = Infinity;
+let timer;
+
+let wins = Number(localStorage.getItem("wins")) || 0;
+document.getElementById("wins").textContent = wins;
+
+let word = "", language = "", guessed = [], errors = 0, hintUsed = false;
+
+/* === DIBUJOS === */
+const normalDrawings = [
+  () => { ctx.moveTo(20,180); ctx.lineTo(180,180); },
+  () => { ctx.moveTo(50,180); ctx.lineTo(50,20); ctx.lineTo(120,20); },
+  () => { ctx.moveTo(120,20); ctx.lineTo(120,40); },
+  () => { ctx.arc(120,55,15,0,Math.PI*2); },
+  () => { ctx.moveTo(120,70); ctx.lineTo(120,120); },
+  () => {
+    ctx.moveTo(120,80); ctx.lineTo(95,105);
+    ctx.moveTo(120,80); ctx.lineTo(145,105);
+    ctx.moveTo(120,120); ctx.lineTo(95,150);
+    ctx.moveTo(120,120); ctx.lineTo(145,150);
+  }
 ];
 
-
-      const trollMessages = [
-        "😈 JAJA, malísima",
-        "💀 Ni cerca…",
-        "😂 La máquina se ríe de ti",
-        "🧠 Concéntrate, humano",
-        "en serio? esa letra? 🤦‍♂️",
-        "😹 Casi, pero no",
-        "No es esa ._. ",
-        "😜 Intenta otra letra"      ];
-
-      const canvas = document.getElementById("canvas");
-      const ctx = canvas.getContext("2d");
-
-      let wins = Number(localStorage.getItem("wins")) || 0;
-      document.getElementById("wins").textContent = wins;
-
-      let word = "";
-      let wordLanguage = "";
-      let guessed = [];
-      let errors = 0;
-      let hintUsed = false;
-      const maxErrors = 6;
-
-      function startGame() {
-        const selected = words[Math.floor(Math.random() * words.length)];
-        word = selected.text;
-        wordLanguage = selected.lang;
-
-        guessed = [];
-        errors = 0;
-        hintUsed = false;
-
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        document.getElementById("message").textContent = "";
-        document.getElementById("language").textContent = wordLanguage;
-
-        renderWord();
-        renderKeyboard();
-      }
+const hardDrawings = [
+  () => {
+    ctx.moveTo(20,180); ctx.lineTo(180,180);
+    ctx.moveTo(50,180); ctx.lineTo(50,20);
+    ctx.lineTo(120,20); ctx.lineTo(120,40);
+  },
+  () => {
+    ctx.arc(120,55,15,0,Math.PI*2);
+    ctx.moveTo(120,70); ctx.lineTo(120,120);
+  },
+  () => {
+    ctx.moveTo(120,80); ctx.lineTo(95,105);
+    ctx.moveTo(120,80); ctx.lineTo(145,105);
+    ctx.moveTo(120,120); ctx.lineTo(95,150);
+    ctx.moveTo(120,120); ctx.lineTo(145,150);
+  }
+];
 
 function drawHangman(step) {
+  ctx.beginPath();
   ctx.lineWidth = 3;
-  ctx.strokeStyle = "#fff";
+  ctx.strokeStyle = HARD_MODE ? "#ff2e2e" : "#fff";
+  const set = HARD_MODE ? hardDrawings : normalDrawings;
+  if (set[step - 1]) set[step - 1]();
+  ctx.stroke();
+}
 
-  const drawings = [
-    () => {
-      ctx.beginPath();
-      ctx.moveTo(20, 180);
-      ctx.lineTo(180, 180);
-      ctx.stroke();
-    },
-    () => {
-      ctx.beginPath();
-      ctx.moveTo(50, 180);
-      ctx.lineTo(50, 20);
-      ctx.lineTo(120, 20);
-      ctx.stroke();
-    },
-    () => {
-      ctx.beginPath();
-      ctx.moveTo(120, 20);
-      ctx.lineTo(120, 40);
-      ctx.stroke();
-    },
-    () => {
-      ctx.beginPath();
-      ctx.arc(120, 55, 15, 0, Math.PI * 2);
-      ctx.stroke();
-    },
-    () => {
-      ctx.beginPath();
-      ctx.moveTo(120, 70);
-      ctx.lineTo(120, 120);
-      ctx.stroke();
-    },
-    () => {
-      ctx.beginPath();
-      ctx.moveTo(120, 80);
-      ctx.lineTo(95, 105);
-      ctx.moveTo(120, 80);
-      ctx.lineTo(145, 105);
-      ctx.moveTo(120, 120);
-      ctx.lineTo(95, 150);
-      ctx.moveTo(120, 120);
-      ctx.lineTo(145, 150);
-      ctx.stroke();
+/* === JUEGO === */
+function toggleHardMode() {
+  HARD_MODE = !HARD_MODE;
+  document.body.classList.toggle("hard-mode", HARD_MODE);
+  resetGame();
+}
+
+function startTimer() {
+  clearInterval(timer);
+  if (!HARD_MODE) {
+    document.getElementById("timer").textContent = "∞";
+    return;
+  }
+  timeLeft = 20;
+  document.getElementById("timer").textContent = timeLeft;
+  timer = setInterval(() => {
+    timeLeft--;
+    document.getElementById("timer").textContent = timeLeft;
+    if (timeLeft <= 0) {
+      clearInterval(timer);
+      document.getElementById("message").textContent = "💀 Tiempo agotado";
+      disableKeyboard();
     }
-  ];
+  }, 1000);
+}
 
-  if (drawings[step - 1]) {
-    drawings[step - 1]();
+function startGame() {
+  const selected = words[Math.floor(Math.random() * words.length)];
+  word = selected.text;
+  language = selected.lang;
+
+  guessed = [];
+  errors = 0;
+  hintUsed = false;
+  maxErrors = HARD_MODE ? 3 : 6;
+
+  ctx.clearRect(0,0,200,200);
+  document.getElementById("language").textContent = language;
+  document.getElementById("message").textContent = "";
+
+  renderWord();
+  renderKeyboard();
+  startTimer();
+}
+
+function renderWord() {
+  const w = document.getElementById("word");
+  w.innerHTML = "";
+  word.split("").forEach(l => {
+    const s = document.createElement("span");
+    s.className = "letter";
+    s.textContent = guessed.includes(l) ? l : "";
+    w.appendChild(s);
+  });
+}
+
+function renderKeyboard() {
+  const kb = document.getElementById("keyboard");
+  kb.innerHTML = "";
+  for (let i = 97; i <= 122; i++) {
+    const b = document.createElement("button");
+    b.textContent = String.fromCharCode(i);
+    b.onclick = () => guess(b.textContent, b);
+    kb.appendChild(b);
   }
 }
 
+function guess(l, b) {
+  b.disabled = true;
+  if (word.includes(l)) {
+    guessed.push(l);
+    renderWord();
+    checkWin();
+  } else {
+    errors++;
+    drawHangman(errors);
+    checkLose();
+  }
+}
 
-      function renderWord() {
-        const container = document.getElementById("word");
-        container.innerHTML = "";
-        word.split("").forEach(letter => {
-          const span = document.createElement("span");
-          span.className = "letter";
-          span.textContent = guessed.includes(letter) ? letter : "";
-          container.appendChild(span);
-        });
-      }
+function giveHint() {
+  if (hintUsed) return;
+  const r = [...new Set(word.split(""))].filter(l => !guessed.includes(l));
+  if (!r.length) return;
+  guessed.push(r[Math.floor(Math.random()*r.length)]);
+  hintUsed = true;
+  errors += HARD_MODE ? 2 : 1;
+  drawHangman(errors);
+  renderWord();
+  checkLose();
+}
 
-      function renderKeyboard() {
-        const kb = document.getElementById("keyboard");
-        kb.innerHTML = "";
-        for (let i = 97; i <= 122; i++) {
-          const btn = document.createElement("button");
-          btn.textContent = String.fromCharCode(i);
-          btn.onclick = () => guess(btn.textContent, btn);
-          kb.appendChild(btn);
-        }
-      }
+function checkWin() {
+  if (word.split("").every(l => guessed.includes(l))) {
+    wins++;
+    localStorage.setItem("wins", wins);
+    document.getElementById("wins").textContent = wins;
+    document.getElementById("message").textContent = HARD_MODE
+      ? "👁️ Lo lograste… increíble"
+      : "🎉 Ganaste";
+    disableKeyboard();
+    clearInterval(timer);
+  }
+}
 
-      function guess(letter, button) {
-        button.disabled = true;
-        if (word.includes(letter)) {
-          guessed.push(letter);
-          renderWord();
-          checkWin();
-        } else {
-          errors++;
-          drawHangman(errors);
-          document.getElementById("message").textContent =
-            trollMessages[Math.floor(Math.random() * trollMessages.length)];
-          checkLose();
-        }
-      }
+function checkLose() {
+  if (errors >= maxErrors) {
+    document.getElementById("message").textContent =
+      `💀 Perdiste. Era "${word}"`;
+    disableKeyboard();
+    clearInterval(timer);
+  }
+}
 
-      function giveHint() {
-        if (hintUsed) return;
+function disableKeyboard() {
+  document.querySelectorAll(".keyboard button").forEach(b => b.disabled = true);
+}
 
-        const remainingLetters = [...new Set(word.split(""))]
-          .filter(letter => !guessed.includes(letter));
+function resetGame() {
+  startGame();
+}
 
-        if (!remainingLetters.length) return;
-
-        const hintLetter =
-          remainingLetters[Math.floor(Math.random() * remainingLetters.length)];
-
-        guessed.push(hintLetter);
-        hintUsed = true;
-
-        document.querySelectorAll(".keyboard button").forEach(btn => {
-          if (btn.textContent === hintLetter) btn.disabled = true;
-        });
-
-        errors++;
-        drawHangman(errors);
-
-        document.getElementById("message").textContent =
-          `💡 Pista: la letra "${hintLetter.toUpperCase()}" es correcta`;
-
-        renderWord();
-        checkWin();
-        checkLose();
-      }
-
-      function checkWin() {
-        if (word.split("").every(l => guessed.includes(l))) {
-          wins++;
-          localStorage.setItem("wins", wins);
-          document.getElementById("wins").textContent = wins;
-          document.getElementById("message").textContent =
-            "🎉 Ganaste… por ahora.";
-          disableKeyboard();
-        }
-      }
-
-      function checkLose() {
-        if (errors === maxErrors) {
-          document.getElementById("message").textContent =
-            `💀 PERDISTE. Era "${word}". Skill issue 😈`;
-          disableKeyboard();
-        }
-      }
-
-      function disableKeyboard() {
-        document.querySelectorAll(".keyboard button")
-          .forEach(btn => btn.disabled = true);
-      }
-
-      function resetGame() {
-        startGame();
-      }
-
-      startGame();
-    </script>
-  </body>
+startGame();
+</script>
+</body>
 </html>
+
