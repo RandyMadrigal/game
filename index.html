@@ -23,7 +23,7 @@ body {
 }
 
 body.hard-mode {
-  background: radial-gradient(circle at top, #300000, #000);
+  background: radial-gradient(circle at top, #2b0000, #000);
 }
 
 .container {
@@ -50,18 +50,13 @@ body.hard-mode .container {
 }
 
 body.hard-mode .stats {
-  color: #ff5c5c;
+  color: #ff6b6b;
 }
 
 canvas {
   background: rgba(255,255,255,0.15);
   border-radius: 15px;
   margin: 10px 0;
-}
-
-body.hard-mode canvas {
-  background: rgba(0,0,0,0.6);
-  box-shadow: inset 0 0 15px rgba(255,0,0,0.4);
 }
 
 .word {
@@ -253,58 +248,14 @@ const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
 
 let HARD_MODE = false;
-let maxErrors = 6;
-let timeLeft = Infinity;
-let timer;
+const maxErrors = 6;
 
 let wins = Number(localStorage.getItem("wins")) || 0;
 document.getElementById("wins").textContent = wins;
 
 let word = "", language = "", guessed = [], errors = 0, hintUsed = false;
+let timer, timeLeft;
 
-/* === DIBUJOS === */
-const normalDrawings = [
-  () => { ctx.moveTo(20,180); ctx.lineTo(180,180); },
-  () => { ctx.moveTo(50,180); ctx.lineTo(50,20); ctx.lineTo(120,20); },
-  () => { ctx.moveTo(120,20); ctx.lineTo(120,40); },
-  () => { ctx.arc(120,55,15,0,Math.PI*2); },
-  () => { ctx.moveTo(120,70); ctx.lineTo(120,120); },
-  () => {
-    ctx.moveTo(120,80); ctx.lineTo(95,105);
-    ctx.moveTo(120,80); ctx.lineTo(145,105);
-    ctx.moveTo(120,120); ctx.lineTo(95,150);
-    ctx.moveTo(120,120); ctx.lineTo(145,150);
-  }
-];
-
-const hardDrawings = [
-  () => {
-    ctx.moveTo(20,180); ctx.lineTo(180,180);
-    ctx.moveTo(50,180); ctx.lineTo(50,20);
-    ctx.lineTo(120,20); ctx.lineTo(120,40);
-  },
-  () => {
-    ctx.arc(120,55,15,0,Math.PI*2);
-    ctx.moveTo(120,70); ctx.lineTo(120,120);
-  },
-  () => {
-    ctx.moveTo(120,80); ctx.lineTo(95,105);
-    ctx.moveTo(120,80); ctx.lineTo(145,105);
-    ctx.moveTo(120,120); ctx.lineTo(95,150);
-    ctx.moveTo(120,120); ctx.lineTo(145,150);
-  }
-];
-
-function drawHangman(step) {
-  ctx.beginPath();
-  ctx.lineWidth = 3;
-  ctx.strokeStyle = HARD_MODE ? "#ff2e2e" : "#fff";
-  const set = HARD_MODE ? hardDrawings : normalDrawings;
-  if (set[step - 1]) set[step - 1]();
-  ctx.stroke();
-}
-
-/* === JUEGO === */
 function toggleHardMode() {
   HARD_MODE = !HARD_MODE;
   document.body.classList.toggle("hard-mode", HARD_MODE);
@@ -338,7 +289,6 @@ function startGame() {
   guessed = [];
   errors = 0;
   hintUsed = false;
-  maxErrors = HARD_MODE ? 3 : 6;
 
   ctx.clearRect(0,0,200,200);
   document.getElementById("language").textContent = language;
@@ -347,6 +297,29 @@ function startGame() {
   renderWord();
   renderKeyboard();
   startTimer();
+}
+
+function drawHangman(step) {
+  ctx.beginPath();
+  ctx.lineWidth = 3;
+  ctx.strokeStyle = "#fff";
+
+  const drawings = [
+    () => { ctx.moveTo(20,180); ctx.lineTo(180,180); },
+    () => { ctx.moveTo(50,180); ctx.lineTo(50,20); ctx.lineTo(120,20); },
+    () => { ctx.moveTo(120,20); ctx.lineTo(120,40); },
+    () => { ctx.arc(120,55,15,0,Math.PI*2); },
+    () => { ctx.moveTo(120,70); ctx.lineTo(120,120); },
+    () => {
+      ctx.moveTo(120,80); ctx.lineTo(95,105);
+      ctx.moveTo(120,80); ctx.lineTo(145,105);
+      ctx.moveTo(120,120); ctx.lineTo(95,150);
+      ctx.moveTo(120,120); ctx.lineTo(145,150);
+    }
+  ];
+
+  if (drawings[step - 1]) drawings[step - 1]();
+  ctx.stroke();
 }
 
 function renderWord() {
@@ -401,9 +374,8 @@ function checkWin() {
     wins++;
     localStorage.setItem("wins", wins);
     document.getElementById("wins").textContent = wins;
-    document.getElementById("message").textContent = HARD_MODE
-      ? "👁️ Lo lograste… increíble"
-      : "🎉 Ganaste";
+    document.getElementById("message").textContent =
+      HARD_MODE ? "👁️ Ganaste en HARD MODE / ME RINDO " : "🎉 Ganaste";
     disableKeyboard();
     clearInterval(timer);
   }
